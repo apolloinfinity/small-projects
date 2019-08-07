@@ -10,8 +10,7 @@ router.get('/', index.loginPage);
 router.post('/login', index.login);
 
 router.get('/register', index.registrationPage);
-
-// router.post('/register');
+router.post('/register', index.registration);
 
 // Priviledged Routes
 router.get('/user', user.dashboard);
