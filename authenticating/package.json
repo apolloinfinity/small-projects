@@ -4,7 +4,14 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "postinstall": "link-module-alias"
+  },
+  "_moduleAliases": {
+    "Models": "main/models",
+    "Routes": "main/routes",
+    "Controllers": "main/controllers",
+    "Auth": "./auth"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +30,7 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "link-module-alias": "^1.2.0",
     "nodemon": "^1.19.1"
   }
 }

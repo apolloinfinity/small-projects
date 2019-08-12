@@ -2,8 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
-const index = require('../controllers/index');
-const user = require('../controllers/user');
+const index = require('Controllers/index');
+const user = require('Controllers/user');
 
 // Public Routes
 router.get('/', index.loginPage);
