@@ -2,7 +2,7 @@ const path = require('path');
 
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
-const sessions = require('express-session');
+const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const mongoose = require('mongoose');
@@ -27,7 +27,24 @@ app.use(express.static('public'));
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
-// Incoming routes
+// Express Session
+app.use(
+  session({
+    secret: 'my secret',
+    resave: true,
+    saveUninitialized: true
+  })
+);
+
+app.use(flash());
+
+// Global Variables for flash
+app.use(function(req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 // Endpoints
 app.use('/', require('./main/routes/index'));

@@ -1,6 +1,9 @@
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
+const { forwardAuthenticated } = require('../../auth/auth');
 
 const Users = require('../models/user');
+
 exports.loginPage = async (req, res) => {
   try {
     res.render('login', {

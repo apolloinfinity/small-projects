@@ -14,5 +14,6 @@ router.post('/register', index.registration);
 
 // Priviledged Routes
 router.get('/user', user.dashboard);
+router.get('/user/logout', user.logout);
 
 module.exports = router;
