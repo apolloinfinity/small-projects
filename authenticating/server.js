@@ -10,6 +10,9 @@ const bp = require('body-parser');
 
 const app = express();
 
+// Passport config
+require('Auth/passport')(passport);
+
 // Database Connection
 const db = require('./config/db').mongoURI;
 mongoose
@@ -22,6 +25,10 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'main', 'views'));
 
 app.use(express.static('public'));
+
+const indexRoutes = require('./main/routes/index');
+const userRoutes = require('./main/routes/user');
+const errorController = require('./main/controllers/error');
 
 // Body parser
 app.use(bp.json());
@@ -36,6 +43,9 @@ app.use(
   })
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(flash());
 
 // Global Variables for flash
@@ -47,7 +57,9 @@ app.use(function(req, res, next) {
 });
 
 // Endpoints
-app.use('/', require('./main/routes/index'));
+app.use('/', indexRoutes);
+app.use('/user', userRoutes);
+app.use(errorController.get404);
 
 const PORT = process.env.PORT || 80;
 
