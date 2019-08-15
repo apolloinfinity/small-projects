@@ -1,4 +1,5 @@
 const express = require('express');
+const { forwardAuthenticated } = require('Auth/auth');
 
 const router = express.Router();
 

@@ -14,7 +14,7 @@ exports.loginPage = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
   try {
     const { email, password } = await req.body;
     Users.findOne({ email: email }).then(user => {
@@ -24,12 +24,13 @@ exports.login = async (req, res) => {
       bcrypt.compare(password, user.password, (err, isMatch) => {
         if (err) throw err;
         if (isMatch) {
-          res.redirect('/user');
+          res.redirect('/dashboard');
         } else {
           res.redirect('/');
         }
       });
     });
+    next();
   } catch (err) {}
 };
 
