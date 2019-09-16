@@ -28,11 +28,6 @@ module.exports.getUserByEmail = async email => {
   return await User.findOne({ email: query });
 };
 
-// module.exports.hashPassword = async password => {
-//   const hashPW = await hash(password, 10);
-//   return hashPW;
-// };
-
 module.exports.addUser = async userData => {
   try {
     const newUser = new User(userData);

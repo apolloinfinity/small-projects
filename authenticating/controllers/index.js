@@ -1,5 +1,5 @@
-const { hash } = require('bcrypt');
-let User = require('../models/User');
+const { hash, compare } = require('bcrypt');
+const User = require('../models/User');
 
 exports.signup = async (req, res) => {
   const { name, email, password, password2 } = req.body;
@@ -35,5 +35,17 @@ exports.signup = async (req, res) => {
 };
 
 exports.login = async (req, res, next) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = await req.body;
+    const user = await User.getUserByEmail(email);
+
+    if (user !== null && compare(password, user.password)) {
+      console.log(`User exists`);
+    } else {
+      console.log('User does not exists');
+    }
+    // next();
+  } catch (err) {
+    console.error(err);
+  }
 };
