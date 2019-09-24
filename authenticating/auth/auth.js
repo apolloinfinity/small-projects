@@ -1,38 +1,28 @@
-const { Basic } = require('permit');
-const { compare } = require('bcrypt');
-const User = require('../models/User');
+const { Bearer, Basic } = require('permit');
+const jwt = require('jsonwebtoken');
+const { findUser } = require('../models/User');
 
-const permit = new Basic();
+const SECRET_KEY = require('../config/keys').TOKEN_SECRET;
 
-authenticate = async (req, res, next) => {
+const permit = new Bearer();
+
+exports.authenticate = async (req, res, next) => {
+  const token = await permit.check(req);
   try {
-    const credentials = await permit.check(req);
-    if (!credentials) {
+    if (!token) {
       permit.fail(res);
-      return next();
+      res.status(403);
     }
-    //   1. Find if email exists
-    const user = await User.getUserByEmail(req.email);
-    // 2. compare password and stored hash
-    const pwHash = user.password;
-    const isMatch = compare(password, pwHash);
 
+    const user = jwt.verify(token, SECRET_KEY);
     if (!user) {
       permit.fail(res);
-      res.redirect('/login');
-      // return next(new Error('Authentication failed'));
+      res.status(403);
+    } else {
+      req.user = user;
+      next();
     }
-
-    if (!isMatch) {
-      permit.fail(res);
-      res.redirect('/login');
-      return next();
-    }
-    req.user = user;
-    next();
   } catch (err) {
     console.error(err);
   }
 };
-
-module.exports = authenticate;
