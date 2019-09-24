@@ -20,21 +20,17 @@ const UserSchema = new Schema({
   }
 });
 
-module.exports = User = model('user', UserSchema);
+module.exports = User = model('users', UserSchema);
 
-module.exports.getUserByEmail = async email => {
-  const query = await email;
-
-  return await User.findOne({ email: query });
+module.exports.findUser = async email => {
+  return await User.findOne({ email: email });
 };
 
 module.exports.addUser = async userData => {
   try {
-    const newUser = new User(userData);
-    console.log(userData);
+    const newUser = User(userData);
     const passwordHash = await hash(newUser.password, 10);
     newUser.password = passwordHash;
-    console.log(`${newUser.password}`);
     return await newUser.save();
   } catch (err) {
     throw err;
